@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="Quartz" Version="3.3.3" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.3.3" />
+    <PackageReference Include="ScrapySharp" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>
