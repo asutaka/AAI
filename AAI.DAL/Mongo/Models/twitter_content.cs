@@ -6,6 +6,7 @@ namespace AAI.DAL.Mongo.Models
     {
         //xđ bản ghi thuộc KOL nào
         public string kolId { get; set; }
+        public long time { get; set; }
         public string entryId { get; set; }
         public string sortIndex { get; set; }
         public TwitterEntryContentModel content { get; set; }

@@ -85,8 +85,7 @@ namespace AAI.Jobs
                                         {
                                             if (string.IsNullOrWhiteSpace(itemEntry.entryId))
                                                 continue;
-
-                                            itemEntry.kolId = itemKol.Key;
+                                            
                                             //check exists(check entryid)
                                             var entities = await _twitterRepo.GetListById(new List<string> { itemEntry.entryId });
                                             if(entities.Any())
@@ -95,8 +94,9 @@ namespace AAI.Jobs
                                                 //var filter = Builders<twitter_content>.Filter.In(x => x.entryId, new List<string> { itemEntry.entryId });
                                                 //var isUpdate = await _twitterRepo.UpdateOneFieldAsync("content", itemEntry.content, filter);
                                                 continue;
-                                            }   
-
+                                            }
+                                            itemEntry.kolId = itemKol.Key;
+                                            itemEntry.time = DateTime.Now.Ticks;
                                             //insert database
                                             await _twitterRepo.InsertOneAsync(itemEntry);
                                         }

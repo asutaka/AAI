@@ -27,20 +27,20 @@ namespace AAI.DAL.Mongo
 
         public async Task<List<twitter_content>> GetListById(List<string> ids)
         {
-            var anwser = new List<twitter_content>();
+            var res = new List<twitter_content>();
 
             try
             {
                 var builder = Builders<twitter_content>.Filter;
                 var filter = builder.In(x => x.entryId, ids);
-                anwser = await _collection.Find(filter).ToListAsync();
+                res = await _collection.Find(filter).ToListAsync();
             }
             catch (Exception ex)
             {
                 logger.LogError($"TwitterContentRepo.GetListById|EXCEPTION| {ex.Message}");
             }
 
-            return anwser;
+            return res;
         }
     }
 }
