@@ -8,6 +8,7 @@ namespace AAI.DAL
         public static void DALDependency(this IServiceCollection services)
         {
             services.AddScoped<ITwitterContentRepo, TwitterContentRepo>();
+            services.AddScoped<ITwitterContentDetailIDRepo, TwitterContentDetailIDRepo>();
         }
     }
 }

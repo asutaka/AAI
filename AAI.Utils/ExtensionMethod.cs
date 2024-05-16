@@ -3,6 +3,7 @@ using Quartz;
 using ScrapySharp.Network;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -67,6 +68,18 @@ namespace AAI.Utils
                 NLogLogger.PublishException(ex);
             }
             return string.Empty;
+        }
+
+        public static long DateStringToLong(this string val, string format)
+        {
+            try
+            {
+                var result = DateTime.ParseExact(val, format, CultureInfo.InvariantCulture);
+                return result.Ticks;
+            }
+            catch (FormatException)
+            {}
+            return 0;
         }
     }
 }

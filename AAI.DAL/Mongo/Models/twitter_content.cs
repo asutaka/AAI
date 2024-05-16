@@ -7,6 +7,7 @@ namespace AAI.DAL.Mongo.Models
         //xđ bản ghi thuộc KOL nào
         public string kolId { get; set; }
         public long time { get; set; }
+        public bool completeCrawl { get; set; }//Khi bài tweet đã đăng đủ lâu(36 tiếng) thì dừng crawl các phản hồi bên trong
         public string entryId { get; set; }
         public string sortIndex { get; set; }
         public TwitterEntryContentModel content { get; set; }
