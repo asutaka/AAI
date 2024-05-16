@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AAI.DAL\AAI.DAL.csproj" />
     <ProjectReference Include="..\AAI.Utils\AAI.Utils.csproj" />
   </ItemGroup>
 

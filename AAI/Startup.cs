@@ -1,3 +1,5 @@
+using AAI.DAL;
+using AAI.DAL.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,6 +19,7 @@ namespace AAI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MongoConfig.configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +29,9 @@ namespace AAI
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddHttpClient();
+
+            //DI 
+            services.DALDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
