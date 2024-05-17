@@ -9,6 +9,8 @@ namespace AAI.DAL
         {
             services.AddScoped<ITwitterContentRepo, TwitterContentRepo>();
             services.AddScoped<ITwitterContentDetailIDRepo, TwitterContentDetailIDRepo>();
+            services.AddScoped<ITwitterContentDetailRepo, TwitterContentDetailRepo>();
+            services.AddScoped<ITwitterKolRepo, TwitterKolRepo>();
         }
     }
 }

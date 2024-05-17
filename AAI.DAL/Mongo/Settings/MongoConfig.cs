@@ -10,5 +10,6 @@ namespace AAI.DAL.Settings
         public static string TwitterContentCollection { get { return configuration.GetSection("MongoDB:TwitterContentCollection").Value; } }
         public static string TwitterContentDetailCollection { get { return configuration.GetSection("MongoDB:TwitterContentDetailCollection").Value; } }
         public static string TwitterContentDetailIDCollection { get { return configuration.GetSection("MongoDB:TwitterContentDetailIDCollection").Value; } }
+        public static string TwitterKolCollection { get { return configuration.GetSection("MongoDB:TwitterKolCollection").Value; } }
     }
 }
