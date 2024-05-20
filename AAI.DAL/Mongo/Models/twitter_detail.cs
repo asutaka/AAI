@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-namespace AAI.DAL.Mongo.Models
+﻿namespace AAI.DAL.Mongo.Models
 {
     public class twitter_detail : BaseMongoDTO
     {
@@ -10,21 +9,6 @@ namespace AAI.DAL.Mongo.Models
 
         public string entryId { get; set; }
         public string sortIndex { get; set; }
-        public TwitterDetailEntryContentModel content { get; set; }
-    }
-    public class TwitterDetailEntryContentModel
-    {
-        public TwitterEntryContentItemModel itemContent { get; set; }
-        public List<TwitterEntryContentItemSubModel> items { get; set; }
-    }
-
-    public class TwitterEntryContentItemSubModel
-    {
-        public string entryId { get; set; }
-        public TwitterEntryContentItemSubChildModel item { get; set; }
-    }
-    public class TwitterEntryContentItemSubChildModel
-    {
-        public TwitterEntryContentItemModel itemContent { get; set; }
+        public TwitterEntryContentModel content { get; set; }
     }
 }

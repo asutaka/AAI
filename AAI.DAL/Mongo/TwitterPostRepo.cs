@@ -30,7 +30,7 @@ namespace AAI.DAL.Mongo
             try
             {
                 var builder = Builders<twitter_post>.Filter;
-                var filter = builder.In(x => x.ObjectId, ids);
+                var filter = builder.In(x => x.post_info.id, ids);
                 res = await _collection.Find(filter).ToListAsync();
             }
             catch (Exception ex)

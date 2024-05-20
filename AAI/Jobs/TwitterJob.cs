@@ -25,7 +25,6 @@ namespace AAI.Jobs
     {
         private readonly ILogger<TwitterJob> _logger;
         private readonly IHttpClientFactory _factory;
-        private readonly ITwitterContentRepo _twitterRepo;
         private readonly ITwitterContentDetailIDRepo _twitterIdRepo;
         private readonly ITwitterKolRepo _twitterKolRepo;
         private readonly ITwitterPostRepo _twitterPostRepo;
@@ -38,14 +37,12 @@ namespace AAI.Jobs
 
         public TwitterJob(IHttpClientFactory factory, 
                         ILogger<TwitterJob> logger, 
-                        ITwitterContentRepo twitterRepo,
                         ITwitterKolRepo twitterKolRepo,
                         ITwitterContentDetailIDRepo twitterIdRepo,
                         ITwitterPostRepo twitterPostRepo) 
         {
             _logger = logger;
             _factory = factory;
-            _twitterRepo = twitterRepo;
             _twitterIdRepo = twitterIdRepo;
             _twitterKolRepo = twitterKolRepo;
 
@@ -102,22 +99,24 @@ namespace AAI.Jobs
                                         {
                                             if (string.IsNullOrWhiteSpace(itemEntry.entryId)
                                                 || itemEntry.entryId.Contains("who-to-follow")
-                                                || itemEntry.content?.itemContent is null)
+                                                || (itemEntry.content?.itemContent is null
+                                                && !(itemEntry.content?.items?.Any() ?? false)))
                                                 continue;
                                             
-                                            //check exists(check entryid)
-                                            var entities = await _twitterRepo.GetListById(new List<string> { itemEntry.entryId });
-                                            if(entities.Any())
+                                            var lInsert = itemEntry.ToTwitterPost(itemKol.kolId);
+                                            foreach (var itemInsert in lInsert)
                                             {
-                                                ////update
-                                                //var filter = Builders<twitter_content>.Filter.In(x => x.entryId, new List<string> { itemEntry.entryId }); 
-                                                //var isUpdate = await _twitterRepo.UpdateOneFieldAsync("content", itemEntry.content, filter);
-                                                continue;
+                                                //check exists(check entryid)
+                                                var entities = await _twitterPostRepo.GetListById(new List<string> { itemInsert.post_info.id });
+                                                if (entities.Any())
+                                                {
+                                                    ////update
+                                                    //var filter = Builders<twitter_content>.Filter.In(x => x.entryId, new List<string> { itemEntry.entryId }); 
+                                                    //var isUpdate = await _twitterRepo.UpdateOneFieldAsync("content", itemEntry.content, filter);
+                                                    continue;
+                                                }
+                                                await _twitterPostRepo.InsertOneAsync(itemInsert);
                                             }
-
-                                            var itemInsert = itemEntry.ToTwitterPost(itemKol.kolId);
-                                            await _twitterPostRepo.InsertOneAsync(itemInsert);
-
                                             //itemEntry.kolId = itemKol.kolId;
                                             //itemEntry.time = DateTime.Now.Ticks;
                                             //itemEntry.completeCrawl = false;

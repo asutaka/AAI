@@ -4,9 +4,10 @@ namespace AAI.DAL.Mongo.Models
 {
     public class twitter_post : BaseMongoDTO
     {
+        public Twitter_ParentInfo parent_info { get; set; }
         public Twitter_PostInfo post_info { get; set; }
-        public Twitter_UserInfo user_info { get; set; }
         public Twitter_PostDetail post_detail { get; set; }
+        public Twitter_UserInfo user_info { get; set; }
     }
     public class twitter_post_detail : BaseMongoDTO
     {
@@ -44,10 +45,12 @@ namespace AAI.DAL.Mongo.Models
     }
     public class Twitter_ParentInfo
     {
-        public string origin_kol { get; set; }
+        public string origin_user { get; set; }
         public string origin_post { get; set; }
+        public string origin_url { get; set; }
         public string parent_user { get; set; }
         public string parent_post { get; set; }
+        public string parent_url { get; set; }
     }
     public class Twitter_UserInfo 
     {

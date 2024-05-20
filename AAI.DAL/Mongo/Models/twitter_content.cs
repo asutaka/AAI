@@ -4,15 +4,21 @@ namespace AAI.DAL.Mongo.Models
 {
     public class twitter_content : BaseMongoDTO
     {
-        //xđ bản ghi thuộc KOL nào
-        public string kolId { get; set; }
-        public long time { get; set; }
-        public bool completeCrawl { get; set; }//Khi bài tweet đã đăng đủ lâu(36 tiếng) thì dừng crawl các phản hồi bên trong
         public string entryId { get; set; }
         public string sortIndex { get; set; }
         public TwitterEntryContentModel content { get; set; }
     }
     public class TwitterEntryContentModel
+    {
+        public TwitterEntryContentItemModel itemContent { get; set; }
+        public List<TwitterEntryContentItemSubModel> items { get; set; }
+    }
+    public class TwitterEntryContentItemSubModel
+    {
+        public string entryId { get; set; }
+        public TwitterEntryContentItemSubChildModel item { get; set; }
+    }
+    public class TwitterEntryContentItemSubChildModel
     {
         public TwitterEntryContentItemModel itemContent { get; set; }
     }
@@ -93,10 +99,14 @@ namespace AAI.DAL.Mongo.Models
         //extened_entities
         public long favorite_count { get; set; }
         public string full_text { get; set; }
+        public string in_reply_to_screen_name { get; set; }
+        public string in_reply_to_status_id_str { get; set; }
+        public string in_reply_to_user_id_str { get; set; }
         public long quote_count { get; set; }
         public long reply_count { get; set; }
         public long retweet_count { get; set; }
         public string id_str { get; set; }
+
         public TwitterRetweetModel retweeted_status_result { get; set; }
     }
     public class TwitterEntryContentItemResultChildLegacyEntityModel
