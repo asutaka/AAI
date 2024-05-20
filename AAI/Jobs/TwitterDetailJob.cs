@@ -95,7 +95,7 @@ namespace AAI.Jobs
                                         foreach (var itemEntry in itemIns.entries)
                                         {
                                             if (string.IsNullOrWhiteSpace(itemEntry.entryId)
-                                                || itemEntry.content?.itemContent is null)
+                                                || !(itemEntry.content?.items?.Any()??false))
                                                 continue;
 
                                             //check exists(check entryid)
@@ -114,18 +114,16 @@ namespace AAI.Jobs
                                             //insert database
                                             await _twitterDetailRepo.InsertOneAsync(itemEntry);
                                             //insert to twitter_content_id
-                                            var detailId = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.id_str;
-                                            var timeString = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.created_at;
-                                            var userContent = itemEntry?.content?.itemContent?.tweet_results?.result?.core?.user_results?.result?.rest_id;
+                                            var detailId = itemEntry?.content?.items.FirstOrDefault().item.itemContent?.tweet_results?.result?.legacy?.id_str;
+                                            var timeString = itemEntry?.content?.items.FirstOrDefault().item.itemContent?.tweet_results?.result?.legacy?.created_at;
                                             var userItem = itemEntry?.content?.items.FirstOrDefault()?.item?.itemContent?.tweet_results?.result?.core?.user_results?.result?.rest_id;
                                             if (!string.IsNullOrWhiteSpace(detailId)
                                                 && !string.IsNullOrWhiteSpace(timeString))
                                             {
-                                                var kol = string.IsNullOrWhiteSpace(userContent) ? userItem : userContent;
                                                 await _twitterIdRepo.InsertOneAsync(new twitter_detail_id
                                                 {
                                                     detailId = detailId,
-                                                    kolId = kol,
+                                                    kolId = userItem,
                                                     time = timeString.DateStringToLong("ddd MMM dd HH:mm:ss +0000 yyyy"),
                                                     isCrawl = false
                                                 });

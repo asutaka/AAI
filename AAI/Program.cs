@@ -59,8 +59,8 @@ namespace AAI
                         q.UseDefaultThreadPool(tp => { tp.MaxConcurrency = 1; });
 
                         // Register the job, loading the schedule from configuration
-                        q.AddJobAndTrigger<TwitterJob>(hostContext.Configuration);
-                        //q.AddJobAndTrigger<TwitterDetailJob>(hostContext.Configuration);
+                        //q.AddJobAndTrigger<TwitterJob>(hostContext.Configuration);
+                        q.AddJobAndTrigger<TwitterDetailJob>(hostContext.Configuration);
                     });
 
                     // Add the Quartz.NET hosted service
