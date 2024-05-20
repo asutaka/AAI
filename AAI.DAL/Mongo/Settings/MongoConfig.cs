@@ -11,5 +11,9 @@ namespace AAI.DAL.Settings
         public static string TwitterContentDetailCollection { get { return configuration.GetSection("MongoDB:TwitterContentDetailCollection").Value; } }
         public static string TwitterContentDetailIDCollection { get { return configuration.GetSection("MongoDB:TwitterContentDetailIDCollection").Value; } }
         public static string TwitterKolCollection { get { return configuration.GetSection("MongoDB:TwitterKolCollection").Value; } }
+        public static string TwitterPostCollection { get { return configuration.GetSection("MongoDB:TwitterPostCollection").Value; } }
+        public static string TwitterPostDetailCollection { get { return configuration.GetSection("MongoDB:TwitterPostDetailCollection").Value; } }
+        public static string TwitterUserCollection { get { return configuration.GetSection("MongoDB:TwitterUserCollection").Value; } }
+        public static string TwitterAccountConfigCollection { get { return configuration.GetSection("MongoDB:TwitterAccountConfigCollection").Value; } }
     }
 }

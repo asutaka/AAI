@@ -16,6 +16,7 @@ using AAI.DAL.Mongo.Models;
 using AAI.DAL.Mongo;
 using MongoDB.Driver;
 using AAI.Utils;
+using AAI.Mapping;
 
 namespace AAI.Jobs
 {
@@ -27,6 +28,7 @@ namespace AAI.Jobs
         private readonly ITwitterContentRepo _twitterRepo;
         private readonly ITwitterContentDetailIDRepo _twitterIdRepo;
         private readonly ITwitterKolRepo _twitterKolRepo;
+        private readonly ITwitterPostRepo _twitterPostRepo;
         private const string _feature = "{ \"rweb_tipjar_consumption_enabled\": true,\"responsive_web_graphql_exclude_directive_enabled\": true,\"verified_phone_label_enabled\": false,\"creator_subscriptions_tweet_preview_api_enabled\": true,\"responsive_web_graphql_timeline_navigation_enabled\": true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\": false,\"communities_web_enable_tweet_community_results_fetch\": true,\"c9s_tweet_anatomy_moderator_badge_enabled\": true,\"articles_preview_enabled\": true,\"tweetypie_unmention_optimization_enabled\": true,\"responsive_web_edit_tweet_api_enabled\": true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\": true,\"view_counts_everywhere_api_enabled\": true,\"longform_notetweets_consumption_enabled\": true,\"responsive_web_twitter_article_tweet_consumption_enabled\": true,\"tweet_awards_web_tipping_enabled\": false,\"creator_subscriptions_quote_tweet_preview_enabled\": false,\"freedom_of_speech_not_reach_fetch_enabled\": true,\"standardized_nudges_misinfo\": true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\": true,\"tweet_with_visibility_results_prefer_gql_media_interstitial_enabled\": true,\"rweb_video_timestamps_enabled\": true,\"longform_notetweets_rich_text_read_enabled\": true,\"longform_notetweets_inline_media_enabled\": true,\"responsive_web_enhance_cards_enabled\": false }";
         private const string _fieldToggles = "{ \"withArticlePlainText\": false }";
         private const string _bearToken = "AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
@@ -38,13 +40,16 @@ namespace AAI.Jobs
                         ILogger<TwitterJob> logger, 
                         ITwitterContentRepo twitterRepo,
                         ITwitterKolRepo twitterKolRepo,
-                        ITwitterContentDetailIDRepo twitterIdRepo) 
+                        ITwitterContentDetailIDRepo twitterIdRepo,
+                        ITwitterPostRepo twitterPostRepo) 
         {
             _logger = logger;
             _factory = factory;
             _twitterRepo = twitterRepo;
             _twitterIdRepo = twitterIdRepo;
             _twitterKolRepo = twitterKolRepo;
+
+            _twitterPostRepo = twitterPostRepo;
         }
         public async Task Execute(IJobExecutionContext context)
         {
@@ -58,7 +63,8 @@ namespace AAI.Jobs
                 {
                     var valueJson = JsonConvert.SerializeObject(new TwitterObjectValueModel
                     {
-                        userId = itemKol.kolId,
+                        userId = "2377058539",
+                        //userId = itemKol.kolId,
                         count = 20,
                         includePromotedContent = true,
                         withQuickPromoteEligibilityTweetFields = true,
@@ -95,6 +101,7 @@ namespace AAI.Jobs
                                         foreach (var itemEntry in itemIns.entries)
                                         {
                                             if (string.IsNullOrWhiteSpace(itemEntry.entryId)
+                                                || itemEntry.entryId.Contains("who-to-follow")
                                                 || itemEntry.content?.itemContent is null)
                                                 continue;
                                             
@@ -107,25 +114,29 @@ namespace AAI.Jobs
                                                 //var isUpdate = await _twitterRepo.UpdateOneFieldAsync("content", itemEntry.content, filter);
                                                 continue;
                                             }
-                                            itemEntry.kolId = itemKol.kolId;
-                                            itemEntry.time = DateTime.Now.Ticks;
-                                            itemEntry.completeCrawl = false;
-                                            //insert database
-                                            await _twitterRepo.InsertOneAsync(itemEntry);
-                                            //insert to twitter_content_id
-                                            var detailId = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.id_str;
-                                            var timeString = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.created_at;
-                                            if (!string.IsNullOrWhiteSpace(detailId)
-                                                && !string.IsNullOrWhiteSpace(timeString))
-                                            {
-                                                await _twitterIdRepo.InsertOneAsync(new twitter_detail_id
-                                                {
-                                                    detailId = detailId,
-                                                    kolId = itemKol.kolId,
-                                                    time = timeString.DateStringToLong("ddd MMM dd HH:mm:ss +0000 yyyy"),
-                                                    isCrawl = false
-                                                });
-                                            }
+
+                                            var itemInsert = itemEntry.ToTwitterPost(itemKol.kolId);
+                                            await _twitterPostRepo.InsertOneAsync(itemInsert);
+
+                                            //itemEntry.kolId = itemKol.kolId;
+                                            //itemEntry.time = DateTime.Now.Ticks;
+                                            //itemEntry.completeCrawl = false;
+                                            ////insert database
+                                            //await _twitterRepo.InsertOneAsync(itemEntry);
+                                            ////insert to twitter_content_id
+                                            //var detailId = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.id_str;
+                                            //var timeString = itemEntry?.content?.itemContent?.tweet_results?.result?.legacy?.created_at;
+                                            //if (!string.IsNullOrWhiteSpace(detailId)
+                                            //    && !string.IsNullOrWhiteSpace(timeString))
+                                            //{
+                                            //    await _twitterIdRepo.InsertOneAsync(new twitter_detail_id
+                                            //    {
+                                            //        detailId = detailId,
+                                            //        kolId = itemKol.kolId,
+                                            //        time = timeString.DateStringToLong("ddd MMM dd HH:mm:ss +0000 yyyy"),
+                                            //        isCrawl = false
+                                            //    });
+                                            //}
                                         }
                                     }
                                 }

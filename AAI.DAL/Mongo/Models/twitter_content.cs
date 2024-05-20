@@ -24,6 +24,14 @@ namespace AAI.DAL.Mongo.Models
     {
         public TwitterEntryContentItemResultChildModel result { get; set; }
     }
+    public class TwitterQuoteModel
+    {
+        public TwitterEntryContentItemResultChildModel result { get; set; }
+    }
+    public class TwitterRetweetModel
+    {
+        public TwitterEntryContentItemResultChildModel result { get; set; }
+    }
     public class TwitterEntryContentItemResultChildModel
     {
         public string rest_id { get; set; }
@@ -36,6 +44,8 @@ namespace AAI.DAL.Mongo.Models
         //source
         //legacy
         public TwitterEntryContentItemResultChildLegacyModel legacy { get; set; }
+        //quote
+        public TwitterQuoteModel quoted_status_result { get; set; }
     }
 
     public class TwitterEntryContentItemResultCoreModel
@@ -64,6 +74,7 @@ namespace AAI.DAL.Mongo.Models
         public string location { get; set; }
         public long media_count { get; set; }
         public string name { get; set; }
+        public string screen_name { get; set; }
         public long normal_followers_count { get; set; }
         public long statuses_count { get; set; }
     }
@@ -86,6 +97,7 @@ namespace AAI.DAL.Mongo.Models
         public long reply_count { get; set; }
         public long retweet_count { get; set; }
         public string id_str { get; set; }
+        public TwitterRetweetModel retweeted_status_result { get; set; }
     }
     public class TwitterEntryContentItemResultChildLegacyEntityModel
     {

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\AAI.Utils\AAI.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\VM\" />
+  </ItemGroup>
+
 </Project>

@@ -11,6 +11,12 @@ namespace AAI.DAL
             services.AddScoped<ITwitterContentDetailIDRepo, TwitterContentDetailIDRepo>();
             services.AddScoped<ITwitterContentDetailRepo, TwitterContentDetailRepo>();
             services.AddScoped<ITwitterKolRepo, TwitterKolRepo>();
+
+            services.AddScoped<ITwitterAccountConfigRepo, TwitterAccountConfigRepo>();
+            services.AddScoped<ITwitterPostRepo, TwitterPostRepo>();
+            services.AddScoped<ITwitterPostDetailRepo, TwitterPostDetailRepo>();
+            services.AddScoped<ITwitterUserRepo, TwitterUserRepo>();
+
         }
     }
 }
